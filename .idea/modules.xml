@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/dt-bigdata-0.1.iml" filepath="$PROJECT_DIR$/.idea/dt-bigdata-0.1.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dt-kafka/dt-kafka.iml" filepath="$PROJECT_DIR$/dt-kafka/dt-kafka.iml" />
       <module fileurl="file://$PROJECT_DIR$/dt-scala/dt-scala.iml" filepath="$PROJECT_DIR$/dt-scala/dt-scala.iml" />
     </modules>
   </component>

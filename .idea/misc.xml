@@ -4,6 +4,7 @@
     <option name="originalFiles">
       <list>
         <option value="$PROJECT_DIR$/dt-scala/pom.xml" />
+        <option value="$PROJECT_DIR$/dt-kafka/pom.xml" />
       </list>
     </option>
   </component>
