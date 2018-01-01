@@ -1,4 +1,4 @@
-package com.it18zhang.kafka.test;
+package com.it18zhang.kafka.api;
 
 import kafka.consumer.Consumer;
 import kafka.consumer.ConsumerConfig;
@@ -7,8 +7,10 @@ import kafka.consumer.KafkaStream;
 import kafka.javaapi.producer.Producer;
 import kafka.producer.KeyedMessage;
 import kafka.producer.ProducerConfig;
+import org.apache.kafka.clients.producer.Callback;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
+import org.apache.kafka.clients.producer.RecordMetadata;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -16,9 +18,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-public class TestProducer {
+public class TestKafkaBaseAPI {
+    long start = 0;
     /**
-     * 生产者
+     * 生产者(老API)
      */
     @Test
     public void testSend() {
@@ -72,23 +75,58 @@ public class TestProducer {
     }
 
     /**
-     * 生产者2
+     * 生产者(新API)
      */
     @Test
     public void testSend2() {
         Properties props = new Properties();
         //设置broker列表
-        props.put("metadata.broker.list","s202:9092");
         props.put("bootstrap.servers","s202:9092");
+
         //设置串行化
-        props.put("key.serializer","org.apache.kafka.common.serialization.StringSerializer");
-        props.put("value.serializer","org.apache.kafka.common.serialization.StringSerializer");
+        props.put("key.serializer.class","org.apache.kafka.common.serialization.StringSerializer");
+        props.put("value.serializer.class","org.apache.kafka.common.serialization.StringSerializer");
         //
         props.put("request.required.acks","0");
+        props.put("ack","all");
+        props.put("batch.size",16384);
 
-        ProducerRecord<String,String> record = new ProducerRecord<String, String>("test","101","jerry");
-        org.apache.kafka.clients.producer.Producer<String,String> p = new KafkaProducer<String, String>(props);
-        p.send(record);
-        System.out.println("message is over!");
+        org.apache.kafka.clients.producer.Producer<String,String> producer = new KafkaProducer<String, String>(props);
+        for (int i = 0; i < 100; i++) {
+            producer.send(
+                    new ProducerRecord<String, String>("test",Integer.toString(i),"test-"+ i));
+        }
+        producer.close();
+    }
+
+    /**
+     * 采用自定义分区器发送消息
+     */
+    public void testSendByCustomPartitioner() {
+        Properties props = new Properties();
+        //设置broker列表
+        props.put("bootstrap.servers","s201:9092,s202:9092");
+        //设置串行化
+        props.put("key.serializer.class","org.apache.kafka.common.serialization.StringSerializer");
+        props.put("value.serializer.class","org.apache.kafka.common.serialization.StringSerializer");
+        //配置自定义分区器
+        props.put("partitioner.class","com.it18zhang.kafka.partition.SimplePartitioner");
+        //设置生产者是否接受消息发送确认ack(0:不接受确认|1:接受确认)
+        props.put("request.required.acks","1");
+        //设置消息发送的模式 同步(sync)/异步(async)
+        props.put("producer.type","sync");
+
+        org.apache.kafka.clients.producer.Producer<String,String> producer = new KafkaProducer<String, String>(props);
+        for (int i = 0; i < 100; i++) {
+            ProducerRecord<String, String> msg = new ProducerRecord<String, String>("test3",Integer.toString(i),"test-"+ i);
+            producer.send(msg, new Callback() { //定义消息确认回调，当消息发送确认时才会调用该回调
+                public void onCompletion(RecordMetadata metadata, Exception exception) {
+                    System.out.println("receiverd ack : " + (System.currentTimeMillis() - start));
+                }
+            });
+            start = System.currentTimeMillis();
+        }
+        producer.close();
+        System.out.println("over");
     }
 }

@@ -299,6 +299,22 @@
 	(2)Asynchronous replication(异步副本)
 	   和同步副本复制流程的区别在于:在于leader写入本地log数据文件之后直接向producer回传ack消息，不需要等待所有的follower复制完成。
 	   
+	6.3 Kafka生产者发送消息分析
+	    Kafka生产者是线程安全的，它维护了本地的buffer pool，即发送消息时，消息进入pool。
+	    Kafka发送消息时异步的，发送后立即返回
+	    ack=all导致记录完全提交时阻塞
+	    
+	    源码流程大致如下:
+	    (1)KafkaProducer.send(rec)
+	    (2)KafkaProducer.doSend(rec,callback)
+	    (3)interceptors.onSend()拦截器方法对消息进行批处理
+	    (4)对K-V进行串行化
+	    (5)计算分区
+	    (6)计算消息的total size
+	    (7)创建TopicPartition对象
+	    (8)拦截器调用callback回调进行后置处理
+	    (9)Sender进行发送[重要]
+	    
 7.Kafka Java API基础
 
    7.1 Kafka Producer API
