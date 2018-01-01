@@ -1,4 +1,5 @@
 ﻿1.JMS简介
+
   1.1 什么是JMS?
       JMS(Java Message Service)Java消息服务规范，是用于异构(不同语言，不同平台下的不同应用或者程序)系统间的通信。
   1.2 MiddleWare(中间件)
@@ -14,6 +15,7 @@
 	  
 
 2.Kafka介绍,安装和基本操作
+
   2.1 Kafka介绍
       (1)分布式流处理平台
       (2)在系统之间构建实时数据流管道
@@ -115,6 +117,7 @@
 
 	  
 3.Kafka集群在Zookeeper上的配置
+
 	$cd zk
 	$zkCli.sh -server s202:2181
 	【结果显示】
@@ -189,6 +192,7 @@
 	⑦/config
     	
 4.Kafka数据文件日志
+
     创建一个5个分区，副本因子2的主题：	
 	$>bin/kafka-topics.sh --create \
 						   --zookeeper s202:2181 \
@@ -228,6 +232,7 @@
 	从上面的结果可以看出kafka是以${TopicName}-{PartitionNo}来组织数据文件的,这些文件会尽量均匀的分散在kafka集群中。
 	
 5.Kafka手动再平衡
+
 	重新布局分区和副本
 	$>kafka-topic.sh --create
 	                 --zookeeper s202:2181
@@ -272,6 +277,7 @@
 	...
 	
 6.Kafka的副本
+
 	(1)broker存放消息是以消息到到达的顺序存放的。
 	(2)生产者和消费都是副本感知的。
 	(3)主题下每个分区都有leader和follower。
@@ -294,6 +300,7 @@
 	   和同步副本复制流程的区别在于:在于leader写入本地log数据文件之后直接向producer回传ack消息，不需要等待所有的follower复制完成。
 	   
 7.Kafka Java API基础
+
    7.1 Kafka Producer API
        Old API代码:com.it18zhang.kafka.test.TestProducer#testSend
 	   New API代码:com.it18zhang.kafka.test.TestProducer#testSend2
