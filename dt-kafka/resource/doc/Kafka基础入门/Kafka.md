@@ -322,5 +322,8 @@
 	   New API代码:com.it18zhang.kafka.test.TestProducer#testSend2
    7.2 Kafka Consumer API
        代码:com.it18zhang.kafka.test.TestProducer#testConsumer
+   7.3 Kafka自定义分区器
+       分区器:com.it18zhang.kafka.partition.SimplePartitioner
+       代码:com.it18zhang.kafka.test.TestProducer#testSendByCustomPartitioner
    
   

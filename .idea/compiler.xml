@@ -6,13 +6,17 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="dt-hbase" />
         <module name="dt-kafka" />
         <module name="dt-scala" />
+        <module name="dt-storm" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="dt-hbase" target="1.6" />
       <module name="dt-kafka" target="1.5" />
       <module name="dt-scala" target="1.5" />
+      <module name="dt-storm" target="1.5" />
     </bytecodeTargetLevel>
   </component>
 </project>

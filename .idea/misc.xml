@@ -5,6 +5,8 @@
       <list>
         <option value="$PROJECT_DIR$/dt-scala/pom.xml" />
         <option value="$PROJECT_DIR$/dt-kafka/pom.xml" />
+        <option value="$PROJECT_DIR$/dt-hbase/pom.xml" />
+        <option value="$PROJECT_DIR$/dt-storm/pom.xml" />
       </list>
     </option>
   </component>
